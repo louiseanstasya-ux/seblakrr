@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import mongoServer from "@/config/mongoConfig";
 import { Menu } from "@/model/menu";
+import { Types } from "mongoose";
 
 export const dynamic = "force-dynamic";
-import { Types } from "mongoose";
 
 const MERCHANT_ID = new Types.ObjectId("60f7b3b3b3b3b3b3b3b3b3b3");
 
