@@ -2,9 +2,9 @@ import { Order } from "@/model/order";
 import { sendRJResponse } from "@/utils/api";
 import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-        const orderId = params.id;
+        const { id: orderId } = await params;
         const order = await Order.findById(orderId).populate("items.item");
         
         if (!order) {
