@@ -7,13 +7,17 @@ import { Order } from "@/model/order"
 import { Transaction, TransactionStatus } from "@/model/transations"
 import { Merchants } from "@/model/merchants"
 
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID!,
-  key_secret: process.env.RAZORPAY_KEY_SECRET!,
-})
+// Lazy init Razorpay to avoid build-time errors when env vars are missing
+function getRazorpay() {
+  return new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID ?? "",
+    key_secret: process.env.RAZORPAY_KEY_SECRET ?? "",
+  })
+}
 
 export async function GET(req: NextRequest) {
   try {
+    const razorpay = getRazorpay()
     const userId = await verifyAuth(req)
     const merchantId = req.nextUrl.searchParams.get("mid");
 
