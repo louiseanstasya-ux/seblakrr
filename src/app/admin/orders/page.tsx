@@ -12,7 +12,7 @@ interface OrderItem {
 }
 
 interface Order {
-  id: string;
+  _id: string;
   antrian: string;
   nama: string;
   items: OrderItem[];
@@ -256,7 +256,7 @@ export default function AdminOrders() {
 
           return (
             <div
-              key={order.id}
+              key={order._id}
               className={`bg-[#1a0800] border rounded-2xl overflow-hidden transition-all ${
                 isMasuk ? "border-orange-500/50 shadow-lg shadow-orange-900/20" : "border-orange-900/30"
               }`}
@@ -320,14 +320,14 @@ export default function AdminOrders() {
                   {isMasuk && (
                     <>
                       <button
-                        onClick={() => setTerimaTarget(order.id)}
+                        onClick={() => setTerimaTarget(order._id)}
                         className="flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-orange-900/30"
                       >
                         <CheckCheck className="w-4 h-4" />
                         Terima Pesanan
                       </button>
                       <button
-                        onClick={() => setTolakTarget(order.id)}
+                        onClick={() => setTolakTarget(order._id)}
                         className="flex items-center gap-2 px-5 py-2.5 bg-red-600/20 hover:bg-red-600/40 text-red-400 font-bold rounded-xl transition-all text-sm border border-red-500/30"
                       >
                         <Ban className="w-4 h-4" />
@@ -339,7 +339,7 @@ export default function AdminOrders() {
                   {/* Status berikutnya */}
                   {!isMasuk && next && nextCfg && (
                     <button
-                      onClick={() => updateStatus(order.id, next)}
+                      onClick={() => updateStatus(order._id, next)}
                       className="flex items-center gap-2 px-5 py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl transition-all text-sm shadow-lg shadow-orange-900/30"
                     >
                       {nextCfg.icon}

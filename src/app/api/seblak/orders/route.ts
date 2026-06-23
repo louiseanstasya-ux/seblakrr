@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import mongoServer from "@/config/mongoConfig";
 import { SeblakOrder } from "@/model/seblakOrder";
 
+export const dynamic = "force-dynamic";
+
 // GET — ambil semua pesanan (untuk admin) atau pesanan by antrian (untuk user)
 export async function GET(req: NextRequest) {
   try {
