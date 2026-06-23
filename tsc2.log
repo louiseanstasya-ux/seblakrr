@@ -1,0 +1,20 @@
+.next/types/validator.ts(25,44): error TS2344: Type 'Route' does not satisfy the constraint 'LayoutRoutes'.
+  Type 'import("C:/Users/rahma/Documents/qr-menu-main/.next/types/routes").LayoutRoutes' is not assignable to type 'import("C:/Users/rahma/Documents/qr-menu-main/.next/dev/types/routes").LayoutRoutes'.
+    Type '"/dashboard/[userId]"' is not assignable to type 'LayoutRoutes'.
+.next/types/validator.ts(25,75): error TS2344: Type 'Route' does not satisfy the constraint 'LayoutRoutes'.
+  Type 'import("C:/Users/rahma/Documents/qr-menu-main/.next/types/routes").LayoutRoutes' is not assignable to type 'import("C:/Users/rahma/Documents/qr-menu-main/.next/dev/types/routes").LayoutRoutes'.
+    Type '"/dashboard/[userId]"' is not assignable to type 'LayoutRoutes'.
+.next/types/validator.ts(53,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/checkout/page.js' or its corresponding type declarations.
+.next/types/validator.ts(62,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/game/page.js' or its corresponding type declarations.
+.next/types/validator.ts(71,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/leaderboard/page.js' or its corresponding type declarations.
+.next/types/validator.ts(80,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/page.js' or its corresponding type declarations.
+.next/types/validator.ts(89,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/review/[orderId]/page.js' or its corresponding type declarations.
+.next/types/validator.ts(98,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/rewards/page.js' or its corresponding type declarations.
+.next/types/validator.ts(107,39): error TS2307: Cannot find module '../../src/app/consumer/[merchantId]/tracking/page.js' or its corresponding type declarations.
+.next/types/validator.ts(116,39): error TS2307: Cannot find module '../../src/app/consumer/page.js' or its corresponding type declarations.
+.next/types/validator.ts(125,39): error TS2307: Cannot find module '../../src/app/dashboard/[userId]/order/page.js' or its corresponding type declarations.
+.next/types/validator.ts(134,39): error TS2307: Cannot find module '../../src/app/dashboard/[userId]/page.js' or its corresponding type declarations.
+.next/types/validator.ts(152,39): error TS2307: Cannot find module '../../src/app/menu/page.js' or its corresponding type declarations.
+.next/types/validator.ts(170,39): error TS2307: Cannot find module '../../src/app/qr/[menuId]/page.js' or its corresponding type declarations.
+.next/types/validator.ts(179,39): error TS2307: Cannot find module '../../src/app/seblak-rr/page.js' or its corresponding type declarations.
+.next/types/validator.ts(444,39): error TS2307: Cannot find module '../../src/app/dashboard/[userId]/layout.js' or its corresponding type declarations.
