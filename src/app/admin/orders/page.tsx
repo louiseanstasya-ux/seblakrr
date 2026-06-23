@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import {
   CheckCircle2, ChefHat, ShoppingBag, Clock,
-  XCircle, Loader2, Bell, CheckCheck, Ban
+  XCircle, Bell, CheckCheck, Ban
 } from "lucide-react";
 
 interface OrderItem {
@@ -134,7 +134,11 @@ export default function AdminOrders() {
     try {
       const res = await fetch("/api/seblak/orders");
       const data = await res.json();
-      if (data.success) setOrders(JSON.parse(JSON.stringify(data.data)));
+      if (data.success) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const normalized = data.data.map((o: any) => ({ ...o, _id: String(o._id || o.id || "") }));
+        setOrders(normalized);
+      }
     } catch { /* ignore */ }
   };
 
