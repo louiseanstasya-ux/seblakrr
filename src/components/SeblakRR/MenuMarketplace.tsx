@@ -6,7 +6,7 @@ import { IMenu } from "@/types/menu"
 import { useAppDispatch, useAppSelector } from "@/hook/redux"
 import { addCheckOutItem, decrementCheckOutItem } from "@/store/reducer/checkout"
 import { setNama, tambahPoin, kurangiPoin, hapusVoucher } from "@/store/reducer/user"
-import { ShoppingCart, CheckCircle2, ChefHat, PackageCheck, X, Star, Gift, User } from "lucide-react"
+import { ShoppingCart, CheckCircle2, ChefHat, PackageCheck, X, Star, Gift, User, Banknote } from "lucide-react"
 
 // =============================================
 // DATA MENU SEBLAK RR (dari price list)
@@ -321,6 +321,18 @@ export default function MenuMarketplace() {
     setOrderStatus('idle');
     setTrackingState(0);
     setPakaiPoin(false);
+  };
+
+  const confirmPayment = async () => {
+    if (!currentOrderId) return;
+    try {
+      await fetch("/api/seblak/orders", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: currentOrderId, paymentStatus: "PAID" }),
+      });
+      setPaymentStatus("PAID");
+    } catch { /* ignore */ }
   };
 
   return (
@@ -649,7 +661,7 @@ export default function MenuMarketplace() {
               <p className="text-zinc-400 text-sm mb-6">Pantau pesanan Anda secara real-time</p>
 
               {/* Info Banner */}
-              <div className="bg-orange-600/10 border border-orange-500/30 rounded-2xl p-5 mb-8 flex justify-around gap-2">
+              <div className="bg-orange-600/10 border border-orange-500/30 rounded-2xl p-5 mb-4 flex justify-around gap-2">
                 <div>
                   <p className="text-zinc-500 text-xs uppercase font-bold tracking-wider mb-1">Pemesan</p>
                   <p className="text-white font-extrabold text-lg">{nama || 'Guest'}</p>
@@ -667,6 +679,24 @@ export default function MenuMarketplace() {
                   </p>
                 </div>
               </div>
+
+              {/* Tombol Konfirmasi Bayar */}
+              {paymentStatus !== 'PAID' && (
+                <motion.button
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  onClick={confirmPayment}
+                  className="w-full mb-6 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-green-900/30"
+                >
+                  <Banknote className="w-5 h-5" />
+                  Konfirmasi Sudah Bayar (Cash / Transfer)
+                </motion.button>
+              )}
+              {paymentStatus === 'PAID' && (
+                <div className="w-full mb-6 flex items-center justify-center gap-2 bg-green-600/20 border border-green-500/30 text-green-400 font-bold py-3 rounded-xl text-sm">
+                  <CheckCircle2 className="w-4 h-4" /> Pembayaran Dikonfirmasi ✓
+                </div>
+              )}
 
               {/* Poin Earned Banner (hanya muncul setelah selesai) */}
               {trackingState === 3 && (

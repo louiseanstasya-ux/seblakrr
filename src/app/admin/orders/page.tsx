@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import {
   CheckCircle2, ChefHat, ShoppingBag, Clock,
-  XCircle, Bell, CheckCheck, Ban
+  XCircle, Bell, CheckCheck, Ban, Banknote
 } from "lucide-react";
 
 interface OrderItem {
@@ -163,6 +163,17 @@ export default function AdminOrders() {
     setTolakTarget(null);
   };
 
+  const markAsPaid = async (id: string) => {
+    try {
+      await fetch("/api/seblak/orders", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, paymentStatus: "PAID" }),
+      });
+      await loadOrders();
+    } catch { /* ignore */ }
+  };
+
   useEffect(() => {
     setMounted(true);
     loadOrders();
@@ -311,9 +322,16 @@ export default function AdminOrders() {
                   <p className="text-orange-400 font-extrabold text-lg">
                     Rp {(order.grandTotal || 0).toLocaleString("id-ID")}
                   </p>
-                  <p className={`text-xs font-bold mt-1 ${order.paymentStatus === "PAID" ? "text-green-400" : "text-zinc-500"}`}>
-                    {order.paymentStatus === "PAID" ? "✓ Lunas" : "Belum Bayar"}
-                  </p>
+                  {order.paymentStatus === "PAID" ? (
+                    <p className="text-xs font-bold mt-1 text-green-400">✓ Lunas</p>
+                  ) : (
+                    <button
+                      onClick={() => markAsPaid(order._id || (order as any).id)}
+                      className="mt-1 flex items-center gap-1 text-xs font-bold text-zinc-400 hover:text-green-400 hover:bg-green-500/10 border border-zinc-700 hover:border-green-500/30 px-2 py-1 rounded-lg transition-all"
+                    >
+                      <Banknote className="w-3 h-3" /> Tandai Lunas
+                    </button>
+                  )}
                 </div>
               </div>
 

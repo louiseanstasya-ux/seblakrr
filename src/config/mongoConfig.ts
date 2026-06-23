@@ -17,7 +17,7 @@ const mongoServer = async (): Promise<void> => {
         console.log("Mongodb is connected successfully");
     } catch (error) {
         console.error('MongoDB Connection Error:', error);
-        process.exit(1);
+        throw error; // Let the API route handle the error instead of crashing the process
     }
 }
 
