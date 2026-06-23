@@ -22,7 +22,8 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ success: true, data: order });
     }
 
-    const orders = await SeblakOrder.find().sort({ createdAt: -1 }).limit(100);
+    const ordersRaw = await SeblakOrder.find().sort({ createdAt: -1 }).limit(100).lean();
+    const orders = ordersRaw.map((o: any) => ({ ...o, _id: o._id.toString(), id: o._id.toString() }));
     return NextResponse.json({ success: true, data: orders });
   } catch (error) {
     console.error(error);
