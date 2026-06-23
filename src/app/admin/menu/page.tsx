@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
-import { Plus, X, Pencil, Save, Search, UtensilsCrossed, Tag, AlertTriangle } from "lucide-react";
+import { Plus, X, Pencil, Save, Search, UtensilsCrossed, Tag, AlertTriangle, Upload, Loader2 } from "lucide-react";
 
 interface MenuItem {
   _id: string;
@@ -56,6 +56,9 @@ export default function AdminMenu() {
   const [editTarget, setEditTarget] = useState<MenuItem | null>(null);
   const [form, setForm] = useState(emptyForm);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
 
   const loadMenus = async () => {
@@ -73,6 +76,7 @@ export default function AdminMenu() {
   const openAdd = () => {
     setEditTarget(null);
     setForm(emptyForm);
+    setUploadError("");
     setShowModal(true);
   };
 
@@ -86,7 +90,34 @@ export default function AdminMenu() {
       section: menu.section,
       image: menu.image,
     });
+    setUploadError("");
     setShowModal(true);
+  };
+
+  const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) {
+      setUploadError("Ukuran file maksimal 5MB");
+      return;
+    }
+    setUploading(true);
+    setUploadError("");
+    try {
+      const fd = new FormData();
+      fd.append("image", file);
+      const res = await fetch("/api/seblak/upload", { method: "POST", body: fd });
+      const data = await res.json();
+      if (data.success) {
+        setForm(f => ({ ...f, image: data.url }));
+      } else {
+        setUploadError(data.message || "Gagal upload");
+      }
+    } catch {
+      setUploadError("Gagal upload gambar");
+    } finally {
+      setUploading(false);
+    }
   };
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -325,6 +356,45 @@ export default function AdminMenu() {
               {/* Image Picker */}
               <div className="flex flex-col gap-2">
                 <label className="text-zinc-400 text-xs font-bold uppercase tracking-wider">Gambar Menu</label>
+
+                {/* Upload tombol */}
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className={`flex items-center justify-center gap-2 w-full py-3 border-2 border-dashed rounded-xl cursor-pointer transition-all ${
+                    uploading
+                      ? "border-orange-500/50 bg-orange-500/5"
+                      : "border-orange-900/40 hover:border-orange-500/50 hover:bg-orange-500/5"
+                  }`}
+                >
+                  {uploading ? (
+                    <><Loader2 className="w-4 h-4 text-orange-400 animate-spin" /><span className="text-orange-400 text-sm font-bold">Mengupload...</span></>
+                  ) : (
+                    <><Upload className="w-4 h-4 text-zinc-400" /><span className="text-zinc-400 text-sm">Upload foto dari perangkat Anda</span></>
+                  )}
+                </div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleUploadFile}
+                />
+                {uploadError && (
+                  <p className="text-red-400 text-xs">{uploadError}</p>
+                )}
+
+                {/* Preview gambar yang diupload atau dipilih */}
+                {form.image && (
+                  <div className="relative h-28 w-full rounded-xl overflow-hidden border border-orange-500/30">
+                    <Image src={form.image} alt="Preview" fill className="object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-2">
+                      <span className="text-white text-[10px] font-bold bg-black/40 px-2 py-1 rounded-lg">Gambar Terpilih</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Preset gambar */}
+                <p className="text-zinc-500 text-xs font-semibold uppercase tracking-wider mt-1">— atau pilih gambar bawaan —</p>
                 <div className="grid grid-cols-3 gap-2">
                   {PRESET_IMAGES.map(img => (
                     <button
